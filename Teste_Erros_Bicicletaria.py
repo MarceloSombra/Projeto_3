@@ -54,7 +54,6 @@ class Testes(unittest.TestCase):
         self.assertEqual(self.loja.receberPagamento(560, 500), 60)
 
 
-
 if __name__ == "__main__":
     unittest.main()
 
