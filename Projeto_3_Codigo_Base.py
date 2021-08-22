@@ -9,32 +9,57 @@ class Loja(object):
         self.aluguelFamilia = 0
       
        
-    def receberPedido(self, qtdeBike, tipoAluguel, periodo):
+    def receberPedido(self, tipoAluguel, qtdeBike, periodo):
         self.estoque -= qtdeBike
         self.qtdeBike = qtdeBike
-        self.tipoAluguel = tipoAluguel  # tipoAluguel = H - hora, D - dia, S - semana, F - familia
+        self.tipoAluguel = tipoAluguel  # tipoAluguel = H - hora, D - dia, S - semana
         self.periodo = periodo # Horas, Dias ou Semanas
 
-        if self.tipoAluguel == "H":
-            print(f"Bicicletaria - Aluguel de {self.qtdeBike} bike(s) do tipo {self.tipoAluguel} pelo periodo de {self.aluguelHora*periodo}.")
-            return self.aluguelHora*periodo
-
-        if self.tipoAluguel == "D":
-            print(f"Bicicletaria - Aluguel de {self.qtdeBike} bike(s) do tipo {self.tipoAluguel} pelo periodo de {self.aluguelDia*periodo}.")
-            return self.aluguelDia*periodo
-        
-        if self.tipoAluguel == "S":
-            print(f"Bicicletaria - Aluguel de {self.qtdeBike} bike(s) do tipo {self.tipoAluguel} pelo periodo de {self.aluguelSemana*periodo}.")
-            return self.aluguelSemana*periodo
-
-        if qtdeBike >= 3 <= 5:
-            if self.tipoAluguel == "F":
-                print(f"Bicicletaria - Aluguel de {self.qtdeBike} bike(s) do tipo {self.tipoAluguel} pelo periodo de {periodo}.")
-                return (qtdeBike*(self.aluguelHora) + qtdeBike*(self.aluguelDia) + qtdeBike*(self.aluguelSemana))*0.70
+        try:
+            if qtdeBike < 0:
+                raise ValueError("Quantidade inválida.")
             
-        else:
-            print("Tipo de aluguel inválido")
-              
+            if qtdeBike > self.estoque:
+                raise SystemError("Quantidade inválida.")
+
+            if qtdeBike >= 3 <= 5:
+                if tipoAluguel == "H" or tipoAluguel == "h":
+                    print(f"Bicicletaria - Aluguel de {self.qtdeBike} bikes por {periodo} hora(s). Você ganhou um desconto de 30% por ter escolhido nosso plano Familia.")
+                    return ((qtdeBike*(self.aluguelHora*periodo))*0.70)
+                if tipoAluguel == "D" or tipoAluguel == "d":
+                    print(f"Bicicletaria - Aluguel de {self.qtdeBike} bikes por {periodo} dia(s). Você ganhou um desconto de 30% por ter escolhido nosso plano Familia.")
+                    return ((qtdeBike*(self.aluguelDia*periodo))*0.70)
+                if tipoAluguel == "S" or tipoAluguel == "s":
+                    print(f"Bicicletaria - Aluguel de {self.qtdeBike} bikes por {periodo} semana(s). Você ganhou um desconto de 30% por ter escolhido nosso plano Familia.")
+                    return ((qtdeBike*(self.aluguelSemana*periodo))*0.70)
+
+            if qtdeBike < 3:
+                if tipoAluguel == "H" or tipoAluguel == "h":
+                    print(f"Bicicletaria - Aluguel de {self.qtdeBike} bike(s) do tipo {self.tipoAluguel} pelo periodo de {periodo} hora(s).")
+                    return (qtdeBike*(self.aluguelHora*periodo))
+
+                if self.tipoAluguel == "D" or tipoAluguel == "d":
+                    print(f"Bicicletaria - Aluguel de {self.qtdeBike} bike(s) do tipo {self.tipoAluguel} pelo periodo de {periodo} dia(s).")
+                    return (qtdeBike*(self.aluguelDia*periodo))
+                
+                if self.tipoAluguel == "S" or tipoAluguel == "s":
+                    print(f"Bicicletaria - Aluguel de {self.qtdeBike} bike(s) do tipo {self.tipoAluguel} pelo periodo de {periodo} semana(s).")
+                    return (qtdeBike*(self.aluguelSemana*periodo))
+            
+            else:
+                print("Tipo de aluguel, quantidade ou período inválido.")
+
+        except ValueError:
+            print("Bicicletaria - Quantidade de bike inválida. Deve-se escolher uma quantidade de bikes para aluguel maior que zero.")
+            return 0
+
+        except SystemError:
+            print(f"Bicicletaria - Quantidade de bikes indisponivel em estoque. Escolha uma quantidade de acordo com a disponibilidade {self.estoque}.")
+            return 0
+
+        except:
+            print(f"Bicicletaria - Pedido não efetuado. Quantidade de bikes disponiveis para locação: {self.estoque}.")  
+       
 
     def receberPagamento(self, valorConta, valorPgto):
         try:
@@ -43,10 +68,18 @@ class Loja(object):
 
             if valorConta == valorPgto:
                 self.caixa += valorPgto
+                print(f"Bicicletaria - O valor da conta é R$ {valorConta}. O valor pago foi R$ {valorPgto}. Obrigado e volte sempre!")
+                return (valorConta - valorPgto)
 
             if valorConta < valorPgto:
                 self.caixa += valorConta
+                print(f"Bicicletaria - O valor da conta é R$ {valorConta}. O valor pago foi R$ {valorPgto}. O valor do troco é R$ {valorPgto - valorConta}.")
                 return (valorPgto - valorConta)
+
+            if valorPgto < valorConta:
+                self.caixa += valorPgto
+                print(f"Bicicletaria - O valor da conta é R$ {valorConta}. O valor pago foi R$ {valorPgto}. Portanto, ainda há um saldo de R$ {valorConta - valorPgto} em aberto.")   
+                return (valorConta - valorPgto)
 
             print("Extrato de Locação de Bicicleta")
             print("Tipo Plano\tQtdeBike\tDuração da Locação\t")
@@ -66,8 +99,6 @@ class Cliente(object):
         self.nome = nome
         self.saldoContaCorrente = saldoContaCorrente
         self.contaLocacao = 0.0
-
-    
         
     def alugarBike(self, qtdeBike, objetoBicicletaria):
         try:
