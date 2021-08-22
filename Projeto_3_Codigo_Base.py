@@ -106,7 +106,7 @@ class Cliente(object):
                 raise ValueError("Quantidade inválida. Por favor escolha a quantidade de Bike(s) que deseja alugar. ")
 
             if not isinstance(objetoBicicletaria, Loja):
-                raise SystemError("Não recebeu ma Bicicletaria ")     
+                raise SystemError("Não recebeu uma Bicicletaria ")     
 
             self.contaLocacao += objetoBicicletaria.receberPedido(qtdeBike, self.tipoAluguel, self.periodo)   
 
