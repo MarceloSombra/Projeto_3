@@ -119,13 +119,11 @@ class Cliente(object):
             return 0
 
         except:
-            print(f"Cliente - {self.nome}. Pedido não efetuado. Conta {self.conta}")
+            print(f"Cliente - {self.nome}. Pedido não efetuado. Conta {self.contaLocacao}")
             return 0
-
 
     def pagarConta(self, valorPgto, objetoBicicletaria):
         try:
-
             if valorPgto <= 0:
                 raise ValueError("Valor inválido")
             
