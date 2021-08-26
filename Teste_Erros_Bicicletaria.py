@@ -16,7 +16,7 @@ class Testes(unittest.TestCase):
     def testeRecebePedidoDia(self): #
         print("\nTeste da Bicicletaria recebendo pedido")
         self.loja = Loja(200, 20)
-        self.assertEqual(self.loja.receberPedido("D", 2, 2), 100) #
+        self.assertEqual(self.loja.receberPedido("D", 2, 2), 100) 
 
     def testeRecebePedidoSemana(self):
         print("\nTeste da Bicicletaria recebendo pedido")
@@ -28,12 +28,12 @@ class Testes(unittest.TestCase):
         self.loja = Loja(200, 20)
         self.assertEqual(self.loja.receberPedido("h", 3, 2), 21)
 
-    def testeRecebePedidoFamiliaDia(self): #
+    def testeRecebePedidoFamiliaDia(self): 
         print("\nTeste da Bicicletaria recebendo pedido")
         self.loja = Loja(50, 20)
         self.assertEqual(self.loja.receberPedido("d", 5, 2), 175)
 
-    def testeRecebePedidoFamiliaSemana(self): #
+    def testeRecebePedidoFamiliaSemana(self): 
         print("\nTeste da Bicicletaria recebendo pedido")
         self.loja = Loja(200, 20)
         self.assertEqual(self.loja.receberPedido("S", 4, 2), 560)
@@ -52,6 +52,17 @@ class Testes(unittest.TestCase):
         print("\n Teste da Bicicletaria recebendo pagamento")
         self.loja = Loja(200, 20)
         self.assertEqual(self.loja.receberPagamento(560, 500), 60)
+
+    def testeAlugarBike(self):
+        print("\n Quantidade de bicicletas a serem alugadas")
+        self.cliente = Cliente("Marcelo", 10000)
+        self.assertEqual(self.cliente.alugarBike(2, "Marcelo"), 0)
+
+    def testePagarConta(self):
+        print("\n Valor total da conta")
+        self.cliente = Cliente("Marcelo", 10000)
+        self.assertEqual(self.cliente.pagarConta(1, "Marcelo"), 0)
+
 
 
 if __name__ == "__main__":
