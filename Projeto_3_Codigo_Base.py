@@ -145,7 +145,6 @@ class Cliente(object):
                 self.contaLocacao = 0
             print(f"Cliente{self.nome} - Pagamento de R$ {valorPgto} da conta de R$ {self.contaLocacao} feito. Conta: R$ {self.contaLocacao}. Saldo conta corrente: R$ {self.saldoContaCorrente}")
 
-        
         except ValueError:
             print(f"Cliente - {self.nome}. Pagamento da conta {self.contaLocacao} não foi efetuado. {valorPgto} deve ser compativel com o valor da conta {self.contaLocacao} ")
             return 0
@@ -162,4 +161,3 @@ class Cliente(object):
             print(f"Cliente - {self.nome}. Pagamento da conta {self.contaLocacao} não foi efetuado. Conta {self.contaLocacao}, saldo conta corrente {self.saldoContaCorrente} ")
             return 0
 
-print("Testando o GitHub!!")
