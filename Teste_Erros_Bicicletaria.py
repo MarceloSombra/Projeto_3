@@ -63,7 +63,7 @@ class Testes(unittest.TestCase):
         self.cliente = Cliente("Marcelo", 10000)
         self.assertEqual(self.cliente.pagarConta(1, "Marcelo"), 0)
 
-
+print("Testando o GitHub!!")
 
 if __name__ == "__main__":
     unittest.main()

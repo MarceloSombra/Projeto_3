@@ -162,4 +162,4 @@ class Cliente(object):
             print(f"Cliente - {self.nome}. Pagamento da conta {self.contaLocacao} não foi efetuado. Conta {self.contaLocacao}, saldo conta corrente {self.saldoContaCorrente} ")
             return 0
 
-    
+print("Testando o GitHub!!")
