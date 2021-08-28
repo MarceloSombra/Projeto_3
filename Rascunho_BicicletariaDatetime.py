@@ -1,5 +1,5 @@
-import datetime
 import math
+import datetime
 
 class Loja(object):
 
@@ -9,7 +9,7 @@ class Loja(object):
         self.aluguelHora = 5
         self.aluguelDia = 25
         self.aluguelSemana = 100
-        self.aluguelFamilia = 0
+        
       
        
     def receberPedidoHora(self, qtdeBike, retiraBike, devolveBike):
@@ -17,7 +17,7 @@ class Loja(object):
         self.qtdeBike = qtdeBike
         self.tempoLocacao = devolveBike - retiraBike
         self.totalHoras = math.ceil(self.tempoLocacao.seconds / 3600) + self.tempoLocacao.days * 24
-
+        
         try:
             if qtdeBike < 0:
                 raise ValueError("Quantidade inválida.")
@@ -32,16 +32,16 @@ class Loja(object):
                 print(f"Bicicletaria - Aluguel de {self.qtdeBike} bike(s) pelo pacote por hora, pelo periodo de {self.totalHoras} hora(s).")
                 return (qtdeBike*(self.aluguelHora*self.totalHoras))
 
-            elif qtdeBike >= 3 <= 5:
-                    print(f"Bicicletaria - Aluguel de {self.qtdeBike} bikes por {self.totalHoras} hora(s). Você ganhou um desconto de 30% por ter escolhido nosso plano Familia.")
-                    return (qtdeBike*(self.aluguelHora*self.totalHoras)*0.70)
+            elif 3 <= qtdeBike <= 5:
+                print(f"Bicicletaria - Aluguel de {self.qtdeBike} bikes por {self.totalHoras} hora(s). Você ganhou um desconto de 30% por ter escolhido nosso plano Familia.")
+                return (qtdeBike*(self.aluguelHora*self.totalHoras)*0.70)
 
         except ValueError:
             print("Bicicletaria - Quantidade de bike inválida. Deve-se escolher uma quantidade de bikes para aluguel maior que zero.")
             return 0
 
         except SystemError:
-            print(f"Bicicletaria - Quantidade de bikes indisponivel em estoque. Escolha uma quantidade de acordo com a disponibilidade {self.estoque}.")
+            print(f"Bicicletaria - Quantidade de bikes indisponivel em estoque. Escolha uma quantidade de acordo com a disponibilidade. Você escolheu {-1*self.estoque} bike(2) acima do nosso estoque.")
             return 0
 
         except:
@@ -68,9 +68,9 @@ class Loja(object):
                 print(f"Bicicletaria - Aluguel de {self.qtdeBike} bike(s) pelo pacote por dia, pelo periodo de {self.totalDias} dia(s).")
                 return (qtdeBike*(self.aluguelDia*self.totalDias))
 
-            elif qtdeBike >= 3 <= 5:
+            elif 3 <= qtdeBike <= 5:
                     print(f"Bicicletaria - Aluguel de {self.qtdeBike} bikes por {self.totalDias} dia(s). Você ganhou um desconto de 30% por ter escolhido nosso plano Familia.")
-                    return (qtdeBike*(self.aluguelHora*self.totalDias)*0.70)
+                    return (qtdeBike*(self.aluguelDia*self.totalDias)*0.70)
 
         except ValueError:
             print("Bicicletaria - Quantidade de bike inválida. Deve-se escolher uma quantidade de bikes para aluguel maior que zero.")
@@ -103,9 +103,9 @@ class Loja(object):
                 print(f"Bicicletaria - Aluguel de {self.qtdeBike} bike(s) pelo pacote Semanal, pelo periodo de {self.totalSemanas} semana(s).")
                 return (qtdeBike*(self.aluguelSemana*self.totalSemanas))
 
-            elif qtdeBike >= 3 <= 5:
-                    print(f"Bicicletaria - Aluguel de {self.qtdeBike} bikes por {self.totalSemanas} semana(s). Você ganhou um desconto de 30% por ter escolhido nosso plano Familia.")
-                    return (qtdeBike*(self.aluguelHora*self.totalSemanas)*0.70)
+            elif 3 <= qtdeBike <= 5:
+                print(f"Bicicletaria - Aluguel de {self.qtdeBike} bikes por {self.totalSemanas} semana(s). Você ganhou um desconto de 30% por ter escolhido nosso plano Familia.")
+                return (qtdeBike*(self.aluguelSemana*self.totalSemanas)*0.70)
 
         except ValueError:
             print("Bicicletaria - Quantidade de bike inválida. Deve-se escolher uma quantidade de bikes para aluguel maior que zero.")
@@ -158,6 +158,7 @@ class Cliente(object):
         self.saldoContaCorrente = saldoContaCorrente
         self.contaLocacao = 0.0
         
+        
     def alugarBike(self, qtdeBike, objetoBicicletaria):
         try:
             if qtdeBike <= 0:
@@ -165,7 +166,7 @@ class Cliente(object):
 
             if not isinstance(objetoBicicletaria, Loja):
                 raise SystemError("Não recebeu uma Bicicletaria ")     
-
+            # verificar estas linhas do código
             self.contaLocacao += objetoBicicletaria.receberPedidoHora(qtdeBike, self.retiraBike, self.devolveBike)  
             self.contaLocacao += objetoBicicletaria.receberPedidoDia(qtdeBike, self.retiraBike, self.devolveBike)
             self.contaLocacao += objetoBicicletaria.receberPedidoSemana(qtdeBike, self.retiraBike, self.devolveBike)

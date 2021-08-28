@@ -9,10 +9,9 @@ class Loja(object):
         self.aluguelFamilia = 0
 
     def receberPedido(self, tipoAluguel, qtdeBike, periodo):
-        self.estoque -= qtdeBike
-        self.qtdeBike = qtdeBike
-        self.tipoAluguel = tipoAluguel  # tipoAluguel = H - hora, D - dia, S - semana
-        self.periodo = periodo  # Horas, Dias ou Semanas
+       
+        self.estoque -= qtdeBike # ´só retirar do estoque depois que validar a quantidade de bike
+        #linha 13 a 15 respons do cliente
 
         try:
             if qtdeBike < 0:
@@ -20,7 +19,7 @@ class Loja(object):
             elif qtdeBike > self.estoque:
                 raise SystemError("Quantidade inválida.")
             elif 3 <= qtdeBike <= 5:
-                if tipoAluguel == "H" or tipoAluguel == "h":
+                if tipoAluguel  == "H" or tipoAluguel == "h": #(tipoAluguel.upper resolveria a questão do H ou h)
                     print(f"Bicicletaria - Aluguel de {self.qtdeBike} bikes por {self.periodo} hora(s). Você ganhou um desconto de 30% por ter escolhido nosso plano Familia.")
                     return qtdeBike*(self.aluguelHora*periodo)*0.70
                 elif tipoAluguel == "D" or tipoAluguel == "d":
@@ -82,7 +81,12 @@ class Loja(object):
         except:
             print("Aconteceu alguma coisa. Favor realizar o pagamento. ")
             return valorConta
+    
+    def devolverBike(self):
+        pass
 
+    def calcularConta(self):
+        pass
 
 class Cliente(object):
 
@@ -90,17 +94,18 @@ class Cliente(object):
         self.nome = nome
         self.saldoContaCorrente = saldoContaCorrente
         self.contaLocacao = 0.0
+        self.periodo = None  # pensar em um novo nome
+        self.qtdeBike = None # responsabilidade de quantidade de bike é do cliente, não da loja
+        self.tipoAluguel = None  # tipoAluguel = H - hora, D - dia, S - semana
 
-    def informacoes(self):
-        print(f"O nome do cliente é {self.nome} e o saldo na conta é de R$ {self.saldoContaCorrente}")
-        
-    def alugarBike(self, qtdeBike, objetoBicicletaria):
+    def alugarBike(self, qtdeBike, tipoAluguel, objetoBicicletaria):
+
         try:
             if qtdeBike <= 0:
                 raise ValueError("Quantidade inválida. Por favor escolha a quantidade de Bike(s) que deseja alugar. ")
             elif not isinstance(objetoBicicletaria, Loja):
                 raise SystemError("Não recebeu uma Bicicletaria ")
-            self.contaLocacao += objetoBicicletaria.receberPedido(qtdeBike, self.tipoAluguel, self.periodo)   
+            self.contaLocacao += objetoBicicletaria.receberPedido(qtdeBike, self.periodo)   
 
         except ValueError:
             print(f"Cliente {self.nome}. Impossivel realizar o pedido pois a quantidade escolhida {qtdeBike} é inválida.")
@@ -150,6 +155,10 @@ class Cliente(object):
             print(f"Cliente - {self.nome}. Pagamento da conta {self.contaLocacao} não foi efetuado. Conta {self.contaLocacao}, saldo conta corrente {self.saldoContaCorrente} ")
             return 0
 
+    
+    def devolverBike(self):
+        pass
+    
 
 """Loja - def __init__(self, estoque, caixa):"""
 """def receberPedido(self, tipoAluguel, qtdeBike, periodo):"""
