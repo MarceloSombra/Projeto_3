@@ -1,183 +1,176 @@
+import datetime
+import math
 class Loja(object):
-
     def __init__(self, estoque, caixa):
         self.estoque = estoque
         self.caixa = caixa
         self.aluguelHora = 5
         self.aluguelDia = 25
         self.aluguelSemana = 100
-        self.aluguelFamilia = 0
-
-<<<<<<< HEAD
-    def receberPedido(self, tipoAluguel, qtdeBike, periodo):
-       
-        self.estoque -= qtdeBike # ´só retirar do estoque depois que validar a quantidade de bike
-        #linha 13 a 15 respons do cliente
-=======
-    def receberPedido(self, tipoAluguel, qtdeBike, periodo):  # bicicletaria1.receberPedido("H", 5, 10)
-        self.estoque -= qtdeBike
-        self.qtdeBike = qtdeBike
-        self.tipoAluguel = tipoAluguel  # tipoAluguel = H - hora, D - dia, S - semana
-        self.periodo = periodo  # Horas, Dias ou Semanas
->>>>>>> 69d6fc396e610c0b66b8fc950c5d9039f644a4dd
-
+        
+     
+    def receberPedido(self, qtdeBike):
         try:
-            if qtdeBike < 0:
-                raise ValueError("Quantidade inválida.")
-            elif qtdeBike > self.estoque:
-                raise SystemError("Quantidade inválida.")
-            elif 3 <= qtdeBike <= 5:
-                if tipoAluguel  == "H" or tipoAluguel == "h": #(tipoAluguel.upper resolveria a questão do H ou h)
-                    print(f"Bicicletaria - Aluguel de {self.qtdeBike} bikes por {self.periodo} hora(s). Você ganhou um desconto de 30% por ter escolhido nosso plano Familia.")
-                    return qtdeBike*(self.aluguelHora*periodo)*0.70
-                elif tipoAluguel == "D" or tipoAluguel == "d":
-                    print(f"Bicicletaria - Aluguel de {self.qtdeBike} bikes por {self.periodo} dia(s). Você ganhou um desconto de 30% por ter escolhido nosso plano Familia.")
-                    return qtdeBike*(self.aluguelDia*periodo)*0.70
-                elif tipoAluguel == "S" or tipoAluguel == "s":
-                    print(f"Bicicletaria - Aluguel de {self.qtdeBike} bikes por {self.periodo} semana(s). Você ganhou um desconto de 30% por ter escolhido nosso plano Familia.")
-                    return qtdeBike*(self.aluguelSemana*self.periodo)*0.70
-            elif 1 <= qtdeBike < 3:
-                if tipoAluguel == "H" or tipoAluguel == "h":
-                    print(f"Bicicletaria - Aluguel de {self.qtdeBike} bike(s) pelo periodo de {self.periodo} hora(s).")
-                    return qtdeBike*self.aluguelHora*periodo
-                elif self.tipoAluguel == "D" or tipoAluguel == "d":
-                    print(f"Bicicletaria - Aluguel de {self.qtdeBike} bike(s) pelo periodo de {periodo} dia(s).")
-                    return qtdeBike*self.aluguelDia*periodo
-                elif self.tipoAluguel == "S" or tipoAluguel == "s":
-                    print(f"Bicicletaria - Aluguel de {self.qtdeBike} bike(s) pelo periodo de {periodo} semana(s).")
-                    return qtdeBike*self.aluguelSemana*periodo
-            else:
-                print("Tipo de aluguel, quantidade ou período inválido.")
+            if qtdeBike <= 0:
+                raise ValueError("Quantidade invalida")
+
+            if qtdeBike > self.estoque:
+                raise SystemError("Estoque indisponivel")
+
+            self.estoque -= qtdeBike
+            print(f"LojaBike - Pedido de {qtdeBike} bike(s) efetuado. Estoque: {self.estoque} ")
+            return 0
+
         except ValueError:
-            print("Bicicletaria - Quantidade de bike inválida. Deve-se escolher uma quantidade de bikes para aluguel maior que zero.")
+            print(f"LojaBike - Pedido de {qtdeBike} bike(s) não efetuado por quantidade inválida. Estoque: {self.estoque}")
             return 0
         except SystemError:
-            print(f"Bicicletaria - Quantidade de bikes indisponivel em estoque. Escolha uma quantidade de acordo com a disponibilidade.")
+            print(f"LojaBike - Pedido de {qtdeBike} bike(s) não efetuado por falta de estoque. Estoque: {self.estoque}")
             return 0
         except:
-            print(f"Bicicletaria - Pedido não efetuado. Quantidade de bikes disponiveis para locação: {self.estoque}.")
+            print(f"LojaBike - Pedido de {qtdeBike} bike(s) não efetuado. Estoque: {self.estoque}")
+            return 0
+
+    def calcularConta(self, qtdeBike, tipoAluguel, retiraBike, devolveBike):
+        self.qtdeBike = qtdeBike
+        self.tipoAluguel = tipoAluguel
+        self.tempoLocacao = devolveBike - retiraBike
+        self.totalHoras = math.ceil(self.tempoLocacao.seconds / 3600) + self.tempoLocacao.days * 24
+        self.totalDias = math.ceil(self.tempoLocacao.seconds / 3600 / 24) + self.tempoLocacao.days
+        self.totalSemanas = math.ceil(self.tempoLocacao.days / 7 + self.tempoLocacao.seconds / 3600 / 24 / 7)
+    
+        try:
+            if qtdeBike <= 0:
+                raise ValueError("Quantidade invalida.")
+
+            elif qtdeBike > self.estoque:
+                raise SystemError("Quantidade inválida.")
+
+            if qtdeBike < 3:
+                if tipoAluguel.upper() == "H":
+                    print(f"Pedido recebido. {qtdeBike} bike(s) alugada(s) pelo plano por Hora. O valor Total é: R$ {qtdeBike*(self.aluguelHora*self.totalHoras)} ")
+                    return qtdeBike*(self.aluguelHora*self.totalHoras)
+                elif tipoAluguel.upper() == "D":
+                    print(f"Pedido recebido. {qtdeBike} bike(s) alugada(s) pelo plano por Dia. O valor Total é: R$ {qtdeBike*(self.aluguelDia*self.totalDias)}")
+                    return qtdeBike*(self.aluguelDia*self.totalDias)
+                elif tipoAluguel.upper() == "S":
+                    print(f"Pedido recebido. {qtdeBike} bike(s) alugada(s) pelo plano por Semana. O valor Total é: R$ {qtdeBike*(self.aluguelSemana*self.totalSemanas)}")
+                    return qtdeBike*(self.aluguelSemana*self.totalSemanas)
+            
+            if qtdeBike >= 3:
+                if tipoAluguel.upper() == "H":
+                    print(f"Pedido recebido. {qtdeBike} bike(s) alugadas pelo plano por Hora--Familia. O valor Total é: R$ {(qtdeBike*(self.aluguelHora*self.totalHoras)*0.70)}.")
+                    return (qtdeBike*(self.aluguelHora*self.totalHoras)*0.70)
+                elif tipoAluguel.upper() == "D":
+                    print(f"Pedido recebido. {qtdeBike} bike(s) alugadas pelo plano por Dia--Familia. O valor Total é: R$ {(qtdeBike*(self.aluguelDia*self.totalDias)*0.70)}.")
+                    return (qtdeBike*(self.aluguelDia*self.totalDias)*0.70)
+                elif tipoAluguel.upper() == "S":
+                    print(f"Pedido recebido. {qtdeBike} bike(s) alugadas pelo plano por Semana--Familia. O valor Total é: R$ {(qtdeBike*(self.aluguelSemana*self.totalSemanas)*0.70)}.")
+                    return (qtdeBike*(self.aluguelSemana*self.totalSemanas)*0.70)
+
+            print(f"Loja - Pedido de {qtdeBike} bike(s) realizado. Tipo de aluguel {tipoAluguel}. ")
+        
+        except ValueError:
+            print("LojaBike - Quantidade de bike inválida. Deve-se escolher uma quantidade de bikes para aluguel maior que zero.")
+            return 0
+
+        except SystemError:
+            print(f"LojaBike - Não há bikes diposnivel em estoque. Qtde disponivel em estoque {self.estoque}. Escolha uma quantidade de acordo com a disponibilidade.")
+            return 0
+
+        except:
+            print(f"LojaBike - Pedido não efetuado. Quantidade de bikes disponiveis para locação: {self.estoque}.")
+            return 0
+        
+
 
     def receberPagamento(self, valorConta, valorPgto):
-        self.valorConta = valorConta
-        self.valorPgto = valorPgto
         try:
-            if (self.valorPgto <= 0) or (self.valorConta <= 0):
+            if valorPgto <= 0 or valorConta <= 0:
                 raise ValueError("Valor(es) inválido(s)")
-            elif self.valorConta == self.valorPgto:
-                self.caixa = self.caixa + self.valorPgto
-                print(f"Bicicletaria - O valor da conta é R$ {self.valorConta}. O valor pago foi R$ {self.valorPgto}. Obrigado e volte sempre!")
-                return self.valorConta - self.valorPgto
-            elif self.valorConta < self.valorPgto:
-                self.caixa = self.caixa + self.valorConta
-                print(f"Bicicletaria - O valor da conta é R$ {self.valorConta}. O valor pago foi R$ {self.valorPgto}. O valor do troco é R$ {self.valorPgto - self.valorConta}.")
-                return self.valorPgto - self.valorConta
-            elif self.valorPgto < self.valorConta:
-                self.caixa = self.caixa + self.valorPgto
-                print(f"Bicicletaria - O valor da conta é R$ {self.valorConta}. O valor pago foi R$ {self.valorPgto}. Portanto, ainda há um saldo de R$ {self.valorConta - self.valorPgto} em aberto.")
-                return self.valorConta - self.valorPgto
-            print("Extrato de Locação de Bicicleta")
-            print("Tipo Plano\tQtdeBike\tDuração da Locação\t")
+
+            elif valorConta == valorPgto:
+                self.caixa = self.caixa + valorPgto
+                print(f"Bicicletaria - O valor da conta é R$ {valorConta}. O valor pago foi R$ {valorPgto}. Obrigado e volte sempre!")
+                return valorConta - valorPgto
+
+            elif valorConta < valorPgto:
+                self.caixa = self.caixa + valorConta
+                print(f"Bicicletaria - O valor da conta é R$ {valorConta}. O valor pago foi R$ {valorPgto}. O valor do troco é R$ {valorPgto - valorConta}.")
+                return valorPgto - valorConta
+
+            elif valorPgto < valorConta:
+                self.caixa = self.caixa + valorPgto
+                print(f"Bicicletaria - O valor da conta é R$ {valorConta}. O valor pago foi R$ {valorPgto}. Portanto, ainda há um saldo de R$ {valorConta - valorPgto} em aberto.")
+                return valorConta - valorPgto
+
         except ValueError:
-            print(f"Valor(es) inválido(s). Valor da Conta: R$ {self.valorConta}. Valor Pago: R$ {self.valorPgto}.")
-            return self.valorConta
+            print(f"Valor(es) inválido(s). Valor da Conta: R$ {valorConta}. Valor Pago: R$ {valorPgto}.")
+            return valorConta
         except:
             print("Aconteceu alguma coisa. Favor realizar o pagamento. ")
-<<<<<<< HEAD
-            return valorConta
+            return valorConta   
     
-    def devolverBike(self):
-        pass
-=======
-            return self.valorConta
->>>>>>> 69d6fc396e610c0b66b8fc950c5d9039f644a4dd
 
-    def calcularConta(self):
-        pass
-
+    
 class Cliente(object):
-
     def __init__(self, nome, saldoContaCorrente):
         self.nome = nome
         self.saldoContaCorrente = saldoContaCorrente
-<<<<<<< HEAD
         self.contaLocacao = 0.0
-        self.periodo = None  # pensar em um novo nome
-        self.qtdeBike = None # responsabilidade de quantidade de bike é do cliente, não da loja
+        self.retiraBike = None  
+        self.devolveBike = None 
         self.tipoAluguel = None  # tipoAluguel = H - hora, D - dia, S - semana
 
-    def alugarBike(self, qtdeBike, tipoAluguel, objetoBicicletaria):
+    def fazerPedido(self, qtdeBike, tipoAluguel, objetoLoja):
+    
+        if qtdeBike <= 0:
+            raise ValueError("Quantidade invalida")
 
-=======
-        self.contaLocacao = 0
+        print(f"Cliente {self.nome} - Pedido de {qtdeBike} bike(s). Tipo de aluguel: {tipoAluguel}.")
+        return -1
+    
+    def devolverBike(self, tipoAluguel, retiraBike, devolveBike):
+        self.tempoLocacao = retiraBike - devolveBike
+        self.tipoAluguel = tipoAluguel
         
-    def alugarBike(self, qtdeBike, classeLoja):  # pessoa2.alugarBike(5, bicicletaria1)
->>>>>>> 69d6fc396e610c0b66b8fc950c5d9039f644a4dd
-        try:
-            if qtdeBike <= 0:
-                raise ValueError("Quantidade inválida. Por favor escolha a quantidade de Bike(s) que deseja alugar. ")
-            elif not isinstance(classeLoja, Loja):
-                raise SystemError("Não recebeu uma Bicicletaria ")
-<<<<<<< HEAD
-            self.contaLocacao += objetoBicicletaria.receberPedido(qtdeBike, self.periodo)   
-=======
-            elif 1 <= qtdeBike <= 5:
-                self.contaLocacao = self.contaLocacao + classeLoja.receberPedido(self.tipoAluguel, qtdeBike, self.periodo)
-                print(f"Cliente {self.nome} - Pedido de {qtdeBike} bicicleta(s) feita. Conta: {self.contaLocacao}")
-                return self.contaLocacao
->>>>>>> 69d6fc396e610c0b66b8fc950c5d9039f644a4dd
+        if self.tipoAluguel == "H":
+            return print(f"Cliente - Tempo total de locação: {self.totalHoras} hora(s).")
+        elif self.tipoAluguel == "D":
+            return print(f"Cliente - Tempo total de locação: {self.totalDias} dias(s).")
+        elif self.tipoAluguel == "S":
+            return print(f"Cliente - Tempo total de locação: {self.totalSemanas} semana(s).")
 
-        except ValueError:
-            print(f"Cliente {self.nome}. Impossivel realizar o pedido pois a quantidade escolhida {qtdeBike} é inválida.")
-            return 0
-        except SystemError:
-            print(f"Cliente {self.nome}. Impossivel realizar o pedido pois a bicicletaria não é válida.")
-            return 0
-        except:
-            print(f"Cliente {self.nome}. Pedido não efetuado. Conta {self.contaLocacao}")
-            return 0
-
-    def pagarConta(self, valorPgto, classeLoja):
+    def pagarConta(self, valorPgto, objetoLoja):
         try:
-            if valorPgto <= 0:
-                raise ValueError("Valor inválido")
-            elif valorPgto > self.saldoContaCorrente:
-                raise ArithmeticError("Valor da conta superior ao saldo disponivel em conta corrente para pagamento. ")
-            elif not isinstance(classeLoja, Loja):
-                raise SystemError("Não recebeu uma Bicicletaria ")
-            self.saldoContaCorrente = self.saldoContaCorrente - valorPgto
-            divida = classeLoja.receberPagamento(self.contaLocacao, valorPgto)
+            if not isinstance(objetoLoja, Loja):
+                raise SystemError("Não recebeu uma Loja")
+
+            self.saldoContaCorrente -= valorPgto
+            divida = objetoLoja.receberPagamento(self.valorConta)
+            print(f"Cliente {self.nome} - Pagamento de R${valorPgto}.")
             if divida == 0:
                 self.contaLocacao = 0
             elif divida > 0:
                 self.contaLocacao = divida
             else:
-                self.saldoContaCorrente = self.saldoContaCorrente - divida
+                self.saldoContaCorrente -= divida
                 self.contaLocacao = 0
-            print(f"Cliente {self.nome} - Pagamento de R$ {valorPgto} da conta de R$ {self.contaLocacao} feito. Conta: R$ {self.contaLocacao}. Saldo conta corrente: R$ {self.saldoContaCorrente}")
-        except ValueError:
-            print(f"Cliente {self.nome}. Pagamento da conta {self.contaLocacao} não foi efetuado. {valorPgto} deve ser compativel com o valor da conta {self.contaLocacao} ")
-            return 0
-        except ArithmeticError:
-            print(f"Cliente {self.nome}. Pagamento da conta {self.contaLocacao} não foi efetuado. {valorPgto} superior ao saldo da conta corrente {self.saldoContaCorrente} ")
-            return 0
+            return self.saldoContaCorrente
+
         except SystemError:
-            print(f"Cliente {self.nome}. Pagamento da conta {self.contaLocacao} não foi efetuado pois a bicicletaria não é válida. Valor pagamento {valorPgto}. Saldo em conta {self.contaLocacao}. ")
-            return 0
+            print(f"Bicicletaria - Quantidade de bikes indisponivel em estoque. Escolha uma quantidade de acordo com a disponibilidade.")
+          
         except:
-            print(f"Cliente {self.nome}. Pagamento da conta {self.contaLocacao} não foi efetuado. Conta {self.contaLocacao}, saldo conta corrente {self.saldoContaCorrente} ")
-            return 0
+            print(f"Bicicletaria - Pedido não efetuado. Quantidade de bikes disponiveis para locação:.")
 
-    
-    def devolverBike(self):
-        pass
-    
-
-bicicletaria1 = Loja(50, 1000)  # Loja - def __init__(self, estoque, caixa)
-pessoa2 = Cliente("Fábio", 1000)  # Cliente - def __init__(self, nome, saldoContaCorrente)
-bicicletaria1.receberPedido("H", 5, 10)  # OK  def receberPedido(self, tipoAluguel, qtdeBike, periodo)
-pessoa2.alugarBike(5, bicicletaria1)  # def alugarBike(self, qtdeBike, classeLoja)
-pessoa2.pagarConta(300, bicicletaria1)  # def pagarConta(self, valorPgto, classeLoja):
-bicicletaria1.receberPagamento(300, 300)  # OK  def receberPagamento(self, valorConta, valorPgto)
+        
+#bicicletaria1 = Loja(50, 1000)  # Loja - def __init__(self, estoque, caixa)
+#pessoa2 = Cliente("Fábio", 1000)  # Cliente - def __init__(self, nome, saldoContaCorrente)
+#bicicletaria1.receberPedido("H", 5, 10)  # OK  def receberPedido(self, tipoAluguel, qtdeBike, periodo)
+#pessoa2.alugarBike(5, bicicletaria1)  # def alugarBike(self, qtdeBike, classeLoja)
+#pessoa2.pagarConta(300, bicicletaria1)  # def pagarConta(self, valorPgto, classeLoja):
+#bicicletaria1.receberPagamento(300, 300)  # OK  def receberPagamento(self, valorConta, valorPgto)
 
 
 

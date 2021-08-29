@@ -103,7 +103,7 @@ class Testes(unittest.TestCase):
     def testeAlugarBike(self):
         print("\nTeste Cliente - Alugar Bike")
         self.loja = Cliente("Marcelo", 32) 
-        self.assertEqual(self.cliente.alugarBike(2, Loja(200, 20)), )
+        self.assertEqual(self.cliente.alugarBike(2, Loja(200, 20)), 0)
 
 
 
