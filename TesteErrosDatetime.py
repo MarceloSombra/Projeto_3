@@ -2,13 +2,13 @@ from Rascunho_BicicletariaDatetime import Cliente, Loja
 import datetime
 import unittest
 
+
 class Testes(unittest.TestCase):
 
     def setUp(self):         
         self.loja = Loja(200, 20)  
         self.cliente = Cliente("Marcelo", 32) 
 
-    
     def testeReceberPedidoHoraFamilia(self):
         print("\nTeste da Bicicletaria recebendo pedido por Hora (Familia)")
         self.loja = Loja(200, 20)
@@ -105,7 +105,25 @@ class Testes(unittest.TestCase):
         self.loja = Cliente("Marcelo", 32) 
         self.assertEqual(self.cliente.alugarBike(2, Loja(200, 20)), 0)
 
+    def testeAlugarBikeQuantidadeDeBikeMenorQueZeroValueError(self):
+        print("\nTeste Cliente - Alugar Bike - Quantidade de Bike menor que zero")
+        self.loja = Cliente("Marcelo", 32)
+        self.assertEqual(self.cliente.alugarBike(-3, Loja(200, 20)), 0)
 
+    def testePagarConta(self):
+        print("\nTeste Cliente - Pagar conta - Quantidade de Bike menor que zero")
+        self.loja = Cliente("Marcelo", 32)
+        self.assertEqual(self.cliente.alugarBike(2, Loja(200, 20)), 0)
+
+    def testePagarContaQuantidadeDeBikeMenorQueZeroValueError(self):
+        print("\nTeste Cliente - Pagar Conta - Quantidade de Bike menor que zero")
+        self.loja = Cliente("Marcelo", 32)
+        self.assertEqual(self.cliente.pagarConta(-2, Loja(200, 20)), 0)
+
+    def testePagarContaValorPagoMaiorContaCorrenteValueError(self):
+        print("\nTeste Cliente - Pagar Conta - Valor pago maior que da conta corrente")
+        self.loja = Cliente("Marcelo", 32)
+        self.assertEqual(self.cliente.pagarConta(2000, Loja(200, 20)), 0)
 
 
 if __name__ == "__main__":
